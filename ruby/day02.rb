@@ -2,10 +2,10 @@
 class Password
   attr_reader :range, :letter, :password
 
-  def initialize(*args)
-    @range = Range.new(*args[0].split('-').map(&:to_i))
-    @letter = args[1][0]
-    @password = args[2]
+  def initialize(rng, chr, pw)
+    @range = Range.new(*rng.split(?-).map(&:to_i))
+    @letter = chr[0]
+    @password = pw.chomp
   end
 
   def valid_part_1?
