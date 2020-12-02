@@ -4,16 +4,8 @@ def run(n)
   REPORT.combination(n).filter { |a| a.sum == 2020 }.first.reduce(:*)
 end
 
-def part1
-  p run(2)
-end
-
-def part2
-  p run(3)
-end
-
-part1
-part2
+p run(2)
+p run(3)
 
 __END__
 1587
