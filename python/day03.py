@@ -1,7 +1,6 @@
 import math
-import os
 
-with open(os.path.join(os.path.dirname(__file__), "day03.txt")) as f:
+with open("inputs/day03.txt") as f:
     grid = [l.strip() for l in f.readlines()]
 
 def trees(r, d):

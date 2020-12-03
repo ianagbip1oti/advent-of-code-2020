@@ -1,8 +1,7 @@
 import math
 import itertools
-import os
 
-with open(os.path.join(os.path.dirname(__file__), "day01.txt")) as f:
+with open("inputs/day01.txt") as f:
     report = [int(l) for l in f.readlines()]
 
 def run(n):
