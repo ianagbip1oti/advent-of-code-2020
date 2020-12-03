@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
 
 public class Day03 {
@@ -32,13 +33,10 @@ public class Day03 {
     public int trees(int right, int down) {
       var count = 0;
 
-      for (var i = 0; i < grid.size(); i++) {
+      for (var i = 0; i < grid.size(); i += down) {
         var row = grid.get(i);
 
-        var isSkippedRow = i % down != 0;
-        var isTree = row.charAt((i / down) * right % row.length()) == '#';
-
-        if (!isSkippedRow && isTree) {
+        if (row.charAt((i / down) * right % row.length()) == '#') {
           count++;
         }
       }
