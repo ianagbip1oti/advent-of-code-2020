@@ -19,10 +19,6 @@ class Passport
     @records = records
   end
 
-  def method_missing(m)
-    records[m.to_s]
-  end
-
   def has_required_fields?
     %w(byr iyr eyr hgt hcl ecl pid).all? { records.key? _1 }
   end
