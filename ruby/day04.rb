@@ -2,6 +2,19 @@
 class Passport
   attr_reader :records
 
+  VALIDATIONS = {
+    byr: -> { (1920..2002).member? _1.to_i },
+    iyr: -> { (2010..2020).member? _1.to_i },
+    eyr: -> { (2020..2030).member? _1.to_i },
+    hgt: -> do 
+      (/^[0-9]+cm$/ =~ _1 and (150..193).include? _1.to_i) or
+      (/^[0-9]+in$/ =~ _1 and (59..76).include? _1.to_i)
+    end,
+    hcl: -> { /^#[0-9a-f]{6}$/ =~ _1 },
+    ecl: -> { %w(amb blu brn gry grn hzl oth).include? _1 },
+    pid: -> { /^[0-9]{9}$/ =~ _1 }
+  }
+
   def initialize(records)
     @records = records
   end
@@ -15,21 +28,7 @@ class Passport
   end
 
   def valid?
-    return false unless self.has_required_fields?
-
-    return false unless (1920..2002).member? self.byr.to_i
-    return false unless (2010..2020).member? self.iyr.to_i
-    return false unless (2020..2030).member? self.eyr.to_i
-
-    return false unless
-      (/^[0-9]+cm$/ =~ self.hgt and (150..193).include? self.hgt.to_i) or
-      (/^[0-9]+in$/ =~ self.hgt and (59..76).include? self.hgt.to_i)
-    
-    return false unless /^#[0-9a-f]{6}$/ =~ self.hcl
-    return false unless %w(amb blu brn gry grn hzl oth).include? self.ecl
-    return false unless /^[0-9]{9}$/ =~ self.pid
-
-    true
+    self.has_required_fields? and VALIDATIONS.map { |k, v| v.call records[k.to_s] }.all?
   end
 
   def self.parse(str)
