@@ -11,15 +11,15 @@ class Passport
   end
 
   def has_required_fields?
-    %w(byr iyr eyr hgt hcl ecl pid).all? { |k| records.key? k }
+    %w(byr iyr eyr hgt hcl ecl pid).all? { records.key? _1 }
   end
 
   def valid?
     return false unless self.has_required_fields?
 
-    return false unless (1920..2002).member?(self.byr.to_i)
-    return false unless (2010..2020).member?(self.iyr.to_i)
-    return false unless (2020..2030).member?(self.eyr.to_i)
+    return false unless (1920..2002).member? self.byr.to_i
+    return false unless (2010..2020).member? self.iyr.to_i
+    return false unless (2020..2030).member? self.eyr.to_i
 
     return false unless
       (/^[0-9]+cm$/ =~ self.hgt and (150..193).include? self.hgt.to_i) or
@@ -33,11 +33,11 @@ class Passport
   end
 
   def self.parse(str)
-    Passport.new(str.split(/\s/).map { |x| x.split ?: }.to_h)
+    Passport.new str.split(/\s/).map { _1.split ?: }.to_h
   end
 end
 
-PASSPORTS = DATA.read.split("\n\n").map { |l| Passport.parse(l) }
+PASSPORTS = DATA.read.split("\n\n").map { Passport.parse _1 }
 
 p PASSPORTS.count(&:has_required_fields?)
 p PASSPORTS.count(&:valid?)
