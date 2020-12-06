@@ -1,13 +1,7 @@
-require 'set'
+ANSWERS = DATA.read.split("\n\n").map { _1.split.map(&:chars) }
 
-def to_answer_sets(strs)
-  strs.split.map { _1.chars.to_set }
-end
-
-ANSWERS = DATA.read.split("\n\n").map { to_answer_sets _1 }
-
-p ANSWERS.map { _1.reduce(&:|).size }.sum
-p ANSWERS.map { _1.reduce(&:&).size }.sum
+p ANSWERS.map { _1.inject(:|).size }.sum
+p ANSWERS.map { _1.inject(:&).size }.sum
 
 
 __END__
