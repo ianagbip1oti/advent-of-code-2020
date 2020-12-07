@@ -9,16 +9,16 @@ def parse_line(str)
     qty = words[0].to_i
     color = words[1..2].join ' '
 
-    [qty, color]
+    [color, qty]
   end
 
-  [ bag.strip, contains ]
+  [ bag.strip, contains.to_h ]
 end
 
 BAGS = DATA.map { parse_line _1 }.to_h
 
 def select_containing(bag)
-  BAGS.select { |k, v| not v.select { |c, b| b.include? bag }.empty? }.keys
+  BAGS.select { |k, v| v.key? bag }.keys
 end
 
 def count_containing(bag)
@@ -27,8 +27,8 @@ def count_containing(bag)
 
   while not q.empty?
     select_containing(q.pop).each do
-      result.add _1
       q.push _1
+      result.add _1
     end
   end
 
@@ -36,11 +36,11 @@ def count_containing(bag)
 end
 
 def count_contained_in(bag)
-  BAGS.fetch(bag, []).reduce(1) { |acc, (c, b)| acc + c * count_contained_in(b) }
+  BAGS.fetch(bag, []).map { |b, c| c * (1 + count_contained_in(b)) }.sum
 end
 
 p count_containing('shiny gold')
-p count_contained_in('shiny gold') - 1
+p count_contained_in('shiny gold')
 
 __END__
 pale turquoise bags contain 3 muted cyan bags, 5 striped teal bags.
