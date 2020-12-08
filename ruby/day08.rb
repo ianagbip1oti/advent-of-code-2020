@@ -11,12 +11,12 @@ def execute(instructions = INSTRUCTIONS)
     ins = instructions[ip]
     executed << ip
 
-    case ins[0]
-    when :acc
-      acc += ins[1]
-    when :jmp
-      ip += ins[1] - 1
-    when :nop
+    case ins
+    in [:acc, arg]
+      acc += arg
+    in [:jmp, arg]
+      ip += arg - 1
+    else
       nil
     end
 
@@ -29,13 +29,13 @@ end
 def fix
   (0...INSTRUCTIONS.size).each do |idx|
     ins_to_test = INSTRUCTIONS.dup
-    case INSTRUCTIONS[idx][0]
-    when :acc
+    case INSTRUCTIONS[idx]
+    in [:jmp, arg]
+      ins_to_test[idx] = [:nop, arg]
+    in [:nop, arg]
+      ins_to_test[idx] = [:jmp, arg]
+    else
       next
-    when :jmp
-      ins_to_test[idx] = [:nop, INSTRUCTIONS[idx][1]]
-    when :nop
-      ins_to_test[idx] = [:jmp, INSTRUCTIONS[idx][1]]
     end
 
     acc, looped = execute(ins_to_test)
